@@ -7,8 +7,6 @@ function NotificationNav() {
         <Dropdown className="navbutton">
             <Dropdown.Toggle bsPrefix="bg-white nav-link nav-icon  bi bi-bell " className="navbutton">
                 <span className="badge bg-primary badge-number">4</span>
-
-
             </Dropdown.Toggle>
 
             <Dropdown.Menu className="notifications">
