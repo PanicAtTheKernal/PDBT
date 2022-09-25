@@ -1,14 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {ReactNode} from 'react';
 import './App.css';
 import Header from "./Componets/MainPage/Header";
+import Login from "./Componets/MainPage/Login";
+import Cookies from 'js-cookie';
+
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <Header/>
-    </div>
-  );
+    if (Cookies.get('refreshToken') == undefined) {
+        return(
+        <div className='App'>
+            <Login/>
+        </div>
+        );
+    }
+    else {
+        return (
+            <div className="App">
+                <Header/>
+            </div>
+        );
+    }
 }
 
 export default App;
