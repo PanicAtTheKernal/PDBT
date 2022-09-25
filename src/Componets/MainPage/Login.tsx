@@ -3,6 +3,8 @@ import { useState} from "react";
 import Cookie from 'js-cookie';
 import '../../App.css';
 import { API } from '../../ApiHandler';
+import { root } from '../../index';
+import App from '../../App';
 
 function setRefreshToken() {
 
@@ -18,6 +20,11 @@ function Login() {
     const submission = (event) => {
         event.preventDefault();
         API.login(username, password);
+        //re-rendering the app so that the main page will be loaded
+        root.render(  
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>)
     }
 
 
