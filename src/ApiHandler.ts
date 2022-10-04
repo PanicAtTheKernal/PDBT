@@ -116,7 +116,9 @@ class UserHandler implements IUserHandler {
 
     private async setUserData(): Promise<void> {
         // Reduces the amount calls to the API
-        if (this.user !== this.defaultUser) {
+        if (this.user.lastName == this.defaultUser.lastName &&
+            this.user.firstName == this.defaultUser.firstName &&
+            this.user.username == this.defaultUser.username) {
             let result = await this.api.getRoute(`User/${this.api.getUserId()}`);
             console.log(typeof (result))
             this.user = {
