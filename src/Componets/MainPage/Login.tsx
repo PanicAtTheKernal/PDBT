@@ -19,9 +19,11 @@ function Login() {
     // @ts-ignore
     const submission = (event) => {
         event.preventDefault();
-        API.login(username, password);
+        API.login(username, password).catch((err) => {
+            alert("Incorrect Login")
+        });
         //re-rendering the app so that the main page will be loaded
-        root.render(  
+        return root.render(
         <React.StrictMode>
             <App />
         </React.StrictMode>)

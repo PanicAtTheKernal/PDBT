@@ -1,7 +1,17 @@
+import Cookies from 'js-cookie';
+
+
 type userData = {
     username: string,
     firstName: string,
     lastName: string
+}
+
+type refreshTokenDto = {
+    token: string,
+    userId: number,
+    jwt: string,
+    expires: string
 }
 
 interface IAPIHandler {
@@ -34,18 +44,35 @@ export class APIHandler implements IAPIHandler {
         return this.userId;
     }
 
+    protected setUserId(userId: number): void {
+        this.userId = userId;
+    }
+
     public getToken(): string {
         return this.token;
     }
 
+    protected setToken(token: string): void {
+        this.token = token;
+    }
+
     public async login(username: string, password: string): Promise<void> {
-        this.postData(`${this.url}User/login`, {
+        let results = await this.postData(`${this.url}User/login`, {
             email: username,
             password: password
-        })
-            .then((data) => {
-                this.token = data as string;
-            })
+        }) as refreshTokenDto;
+
+        if(results == null) {
+            throw new Error("IncorrectLogin");
+        }
+
+        this.setUserId(results.userId);
+        this.setToken(results.token);
+        Cookies.set("refreshToken", results.jwt, {
+            expires: new Date(results.expires),
+            secure: true
+        });
+
     }
 
     public async postRoute(route: string, data: object): Promise<any> {
@@ -71,12 +98,15 @@ export class APIHandler implements IAPIHandler {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',
             body: JSON.stringify(data)
         });
 
+        if (!response.ok) return null;
+
         if (text) return response.text();
         
-        return response.json;
+        return response.json();
     }
 }
 
